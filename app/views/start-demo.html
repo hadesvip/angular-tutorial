@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="../bower_components/angular/angular.min.js"></script>
 </head>
 <body>
     <div ng-controller="BoxCtrl">
@@ -13,14 +11,47 @@
         <p>{{ w }} x {{ h }}</p>
         <p>W: <input type="text" ng-model="w" /></p>
         <p>H: <input type="text" ng-model="h" /></p>
+
+      <!--  <div ng-include="'include.html'">
+
+        </div>-->
+
     </div>
+
+    <ul ng-init="l=[1,2,3,4]">
+        <li ng-class-odd="'odd'" ng-class-even="'even'" ng-repeat="m in l">{{ m }}</li>
+    </ul>
+
+    <form name="test_form" ng-controller="formController" ng-init="o =[0,1,2,3,4,5];a=o[1];">
+        <input type="text" ng-model="a" required  />
+        <br/>
+        <span ng-click="see()" >{{test_form.$error}}</span>
+        <hr>
+        <input type="radio" name="radio-a" ng-model="radio_a" value="AA"/>
+        <input type="radio" name="radio-a" ng-model="radio_a" value="BB"/>
+        <span>{{radio_a}}</span>
+        <hr>
+        <input type="checkbox" name="ck_a" ng-model="ck_a"  ng-true-value="'AA'" ng-false-value="'BB'"/>
+        <span>{{ck_a}}</span>
+        <hr>
+        <select ng-model="select_model" ng-options=" x for x in o " ng-change="show()">
+            <option value="">请选择</option>
+        </select>
+    </form>
+
+
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/angular/angular.min.js"></script>
     <script type="text/javascript">
+
         angular.module('app', [], angular.noop)
                 .controller('BoxCtrl', function($scope, $element){
                     //$element 就是一个 jQuery 对象
                     var e = $element.children().eq(0);
                     $scope.w = e.width();
                     $scope.h = e.height();
+
+                    $scope.url="include.html";
 
                     $scope.click = function(){
                         $scope.w = parseInt($scope.w) + 10;
@@ -38,7 +69,20 @@
                                 e.height(to);
                             }
                     );
-                });
+                })
+                .controller('formController',function($scope){
+                    $scope.ck_a='AA';
+                    $scope.show=function($scope){
+                        console.log($scope.select_model);
+                    };
+                    $scope.see=function(){
+                        console.log($scope.test_form.$error);
+                    }
+                })
+        ;
+
+        var obj = angular.element(document);
+        console.log(obj);
         angular.bootstrap(document.documentElement, ['app']);
     </script>
 </body>
